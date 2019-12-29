@@ -43,7 +43,6 @@ async function faceRec(url, num, message) {
       return;
     }
     else {
-      console.log(body)
       let checkEmptyBody = body.toString();
       if( checkEmptyBody === '[]'){
         client.channels.get(message).send('Cannot Identify any faces')
@@ -51,6 +50,12 @@ async function faceRec(url, num, message) {
       }
       var x = body.replace('[', '')
       var y = JSON.parse(x.replace(']', ''))
+      console.log(body.toString())
+      console.log(y.toString())
+      if(body.toString() === '{"error":{"code":"InvalidImage","message":"Decoding error, image format unsupported."}}'){
+        client.channels.get(message).send('Please send a valid image')
+        return
+      }
       console.log('FaceId' + ': ' + y.faceId)
       if (num == 1) {
         globalvar1 = y.faceId
@@ -59,7 +64,6 @@ async function faceRec(url, num, message) {
         globalvar2 = y.faceId
       }
       if (num == '') {
-
         client.channels.get(message).send('Gender' + ': ' + y.faceAttributes.gender)
         client.channels.get(message).send('Age' + ': ' + y.faceAttributes.age)
         client.channels.get(message).send('Emotion' + ': ' + JSON.stringify(y.faceAttributes.emotion))
@@ -76,14 +80,13 @@ async function faceCompare(url1, url2, message) {
   var http = require("https");
   var options = {
     "method": "POST",
-    "hostname": "nibbadiscordbot.cognitiveservices.azure.com",
+    "hostname": "",
     "port": null,
     "path": "/face/v1.0/verify",
     "headers": {
       "content-type": "application/json",
-      "ocp-apim-subscription-key": "e3f6402e2a2d4d4981aedcd07d2d7e91",
-      "cache-control": "no-cache",
-      "postman-token": "1c73dcb6-af8b-2591-d49f-efcb38b3da2a"
+      "ocp-apim-subscription-key": "1",
+      "cache-control": "no-cache"
     }
   };
 
@@ -127,15 +130,25 @@ client.on('ready', () => {
 
 client.on('message', function (message) {
   var Attachment = (message.attachments).array();
-  if (message.author.bot || message.content !== '') {
+  
     if (message.content === 'Fc'|| message.content === 'fc'|| message.content === 'fC') {
-      faceCompare(Attachment[0].url, Attachment[1].url, message.channel.id)
-      return
+      if(message.attachments.size < 2){
+        client.channels.get(message.channel.id).send('Please send 2 valid images')
+        return
+      }
+      else{
+        faceCompare(Attachment[0].url, Attachment[1].url, message.channel.id)
+        return
+      }
     }
     if (message.content === 'Fr' || message.content === 'fr' || message.content === 'fR') {
-      faceRec(Attachment[0].url, 0, message.channel.id)
-      return
+      if (message.attachments.size == 0){
+        client.channels.get(message.channel.id).send('Please send an image')
+        return
+      }
+      else{
+        faceRec(Attachment[0].url, 0, message.channel.id)
+        return
+      }
     }
-    return
-  }
 });
