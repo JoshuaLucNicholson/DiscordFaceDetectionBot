@@ -3,9 +3,9 @@ const request = require('request');
 const Discord = require('discord.js')
 const client = new Discord.Client()
 
-const bot_secret_token = "NTk1NDUzNjQxNTc4NTEyNDA0.XgCG-Q.lxXkJE4lJVKc5OzqlpQ_Rq38EK8"
-const subscriptionKey = 'e3f6402e2a2d4d4981aedcd07d2d7e91';
-const uriBase = 'https://nibbadiscordbot.cognitiveservices.azure.com/face/v1.0/detect';
+const bot_secret_token = ""
+const subscriptionKey = '';
+const uriBase = '';
 
 client.login(bot_secret_token)
 
