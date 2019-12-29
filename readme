@@ -1,0 +1,5 @@
+This bot uses Azure face API to detect faces and return information.
+
+Sending an image with the caption 'FR' will return information on the person such as age, gender and emotion
+
+Sending 2 images of people with the caption 'FC' will compare the 2 people and reply saying if they are the same person or not
